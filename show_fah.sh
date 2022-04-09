@@ -5,8 +5,8 @@
 
 # the regular expression pattern for the work unit
 WORKUNIT=WU0.
-# the slot to monitir
-FOLDSLOT=FS01
+# the slot to monitor
+FOLDSLOT=${FOLDSLOT:-FS01}
 # the log file
 FAHLOG=${FAHLOG:-/home/username/fahdir/log.txt}
 declare -a fahStatus fahRate
@@ -32,7 +32,7 @@ change_datetime_to_seconds(){
 }
 
 most_recent_points(){
-	grep "Final credit estimate" $FAHLOG | tail -n1 | tr ',' ':' | cut -s -d: -f1-3,7
+	grep "$FOLDSLOT:Final credit estimate" $FAHLOG | tail -n1 | tr ',' ':' | cut -s -d: -f1-3,7
 	# do awk stuff here, if you can
 }
 
@@ -68,8 +68,8 @@ fold_rate(){
 #DT=$(current_datetime)
 #echo "You  are" $DT $(change_datetime_to_seconds $DT)
 
+most_recent_points
 current_fahstatus
 fold_rate
 
 echo $(echo ${fahStatus[4]}|cut -s -d: -f1-3) $(echo ${fahStatus[4]}|cut -s -d: -f4) Avg: ${tT}s
-most_recent_points
